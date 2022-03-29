@@ -1,0 +1,49 @@
+var candle;
+var heightRatio;
+var seed;
+var bg;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  seed = floor(random(Number.MAX_SAFE_INTEGER));
+  reset();
+}
+
+function draw() {
+  bg.display();
+  candle.update();
+  candle.display();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  reset();
+}
+
+function reset() {
+  heightRatio = height/595;
+  noiseSeed(seed);
+  candle = new Candle(width/2, height/2);
+  bg = new Background();
+}
+
+class Background{
+  constructor() {
+    this.bg = createGraphics(width, height);
+    this.bg.translate(width/2, height/2);
+    this.defineConstants();
+    this.construct();
+  }
+  
+  display() {
+    image(this.bg, 0, 0);
+  }
+
+  construct() {
+    this.bg.noStroke();
+    this.bg.background(this.COLOR.BLACK);
+    for (let i = this.DIAM.MAX; i > this.DIAM.MIN; i -= this.DIAM.DELTA) {
+      this.bg.fill(map(i, this.DIAM.MIN, this.DIAM.MAX, this.COLOR.GRAY.LIGHTER, this.COLOR.GRAY.DARKER));
+      this.bg.circle(this.POS.X, this.POS.Y, i);
+    }
+  }
