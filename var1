@@ -47,3 +47,52 @@ class Background{
       this.bg.circle(this.POS.X, this.POS.Y, i);
     }
   }
+defineConstants() {
+    this.COLOR = {BLACK: color(0),
+                  GRAY: {LIGHTER: 20, DARKER: 0}};
+    this.DIAM = {MIN: 1.5*height, MAX: 2*width, DELTA:5};
+    this.POS = {X:0, Y: -height/3};
+  }
+}
+
+class Candle {
+  constructor(x, y) {
+    this.flame = new Flame(x, y);
+    this.wick = new Wick(x, y);
+    this.wax = new Wax(x, y);
+  }
+
+  update() {
+    this.flame.update();
+  }
+
+  display() {
+    this.flame.display();
+    this.wick.display();
+    this.wax.display();
+  }
+}
+
+class Wax {
+  constructor(x, y) {
+    this.pg = createGraphics(width, height);
+    this.pg.translate(x, y);
+    this.defineConstants();
+    this.construct();
+  }
+
+  display() {
+    image(this.pg, 0, 0);
+  }
+
+  construct() {
+    this.pg.noStroke();
+    for (let i = 0; i < this.N; ++ i) {
+      this.pg.fill(this.COLOR.RED,
+                   this.COLOR.GREEN + this.COLOR.D_GREEN*i,
+                   this.COLOR.BLUE,
+                   this.COLOR.ALPHA + this.COLOR.D_ALPHA*i);
+      this.pg.rect(this.POS.X, this.POS.Y, this.DIM.W, this.DIM.H + this.DIM.D_H*i,
+                   this.RADIUS, this.RADIUS, 0, 0);
+    }
+  }
