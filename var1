@@ -96,3 +96,56 @@ class Wax {
                    this.RADIUS, this.RADIUS, 0, 0);
     }
   }
+ defineConstants() {
+    this.POS = {X: -30*heightRatio, Y: 65*heightRatio};
+    this.DIM = {W: 60*heightRatio, H: 60*heightRatio, D_H: -5*heightRatio};
+    this.N = 10;
+    this.RADIUS = 5*heightRatio;
+    this.COLOR = {
+      RED: 255,
+      GREEN: 80, D_GREEN: 10,
+      BLUE: 0,
+      ALPHA: 0, D_ALPHA: 5};
+  }
+}
+
+class Wick {
+  constructor(x, y) {
+    this.pg = createGraphics(width, height);
+    this.pg.translate(x, y);
+    this.defineConstants();
+    this.construct();
+  }
+
+  display() {
+    image(this.pg, 0, 0);
+  }
+
+  construct() {  
+    this.pg.noStroke();
+    this.pg.fill(this.COLOR.BLACK);
+    for (let i = 0; i < this.N; ++i) {
+      let dNoise = this.NOISE.SPEED*i;
+      this.pg.circle(customNoise(this.NOISE, dNoise), this.Y + i, this.WIDTH);
+    }
+  }
+
+  defineConstants() {
+    this.Y = 35*heightRatio;
+    this.WIDTH = 4*heightRatio;
+    this.NOISE = {AMPLITUDE: 20*heightRatio, DISLOCATION: random(100), SPEED: 0.05};
+    this.N = floor(30*heightRatio);
+    this.COLOR = {BLACK: color(0)};
+  }
+}
+
+class Flame {
+  constructor(x, y) {
+    this.defineConstants();
+
+    this.layer = [];
+    for (let i = 0; i < this.N_LAYERS; ++i) {
+      this.layer[i] = createGraphics(width, height);
+      this.layer[i].translate(x, y);
+    }
+  }
