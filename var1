@@ -149,3 +149,55 @@ class Flame {
       this.layer[i].translate(x, y);
     }
   }
+update() {
+    this.updateData();
+
+    this.backLight();
+    this.blueTip();
+    this.nonLuminousZone();
+    this.luminousZone();
+  }
+
+  display() {
+    for (let i = 0; i < this.N_LAYERS; ++i) {
+      image(this.layer[i], 0, 0);
+    }
+  }
+
+  defineConstants() {
+    this.N_LAYERS = 4;
+
+    this.DIMENSIONS = {
+      Y: {DEFAULT: 50*heightRatio, VARIATION: 10*heightRatio},
+      X: {
+        BOTTOM: {
+          SIDES: {DEFAULT: 30*heightRatio, VARIATION: 20*heightRatio},
+          CENTER: {DEFAULT: 0, VARIATION: 0}
+        },
+        TOP: {
+          SIDES: {DEFAULT: 10*heightRatio, VARIATION: 10*heightRatio},
+          CENTER: {DEFAULT: 0, VARIATION: 30*heightRatio}
+        }
+      }
+    }
+
+    this.FLAME_OUTLINE_COORDINATES = {
+      BOTTOM: {
+        Y: {
+          DEFAULT: this.DIMENSIONS.Y.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.Y.VARIATION, DISLOCATION: random(100)}
+        },
+        LEFT: {
+          DEFAULT: -this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.X.BOTTOM.SIDES.VARIATION, DISLOCATION: random(100)
+          }
+        },
+        CENTER: {
+          DEFAULT: this.DIMENSIONS.X.BOTTOM.CENTER.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.X.BOTTOM.CENTER.VARIATION, DISLOCATION: random(100)}
+        },
+        RIGHT: {
+          DEFAULT: this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.X.BOTTOM.SIDES.VARIATION, DISLOCATION: random(100)}
+        }
+      },
