@@ -201,3 +201,53 @@ update() {
           NOISE: {AMPLITUDE: this.DIMENSIONS.X.BOTTOM.SIDES.VARIATION, DISLOCATION: random(100)}
         }
       },
+TOP: {
+        Y: {
+          DEFAULT: -this.DIMENSIONS.Y.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.Y.VARIATION, DISLOCATION: random(100)}
+        },
+        LEFT: {
+          DEFAULT: -this.DIMENSIONS.X.TOP.SIDES.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.X.TOP.SIDES.VARIATION, DISLOCATION: random(100)}
+        },
+        CENTER: {
+          DEFAULT: this.DIMENSIONS.X.TOP.CENTER.DEFAULT,
+          NOISE: { AMPLITUDE: this.DIMENSIONS.X.TOP.CENTER.VARIATION, DISLOCATION: random(100)}
+        },
+        RIGHT:  {
+          DEFAULT: this.DIMENSIONS.X.TOP.SIDES.DEFAULT,
+          NOISE: {AMPLITUDE: this.DIMENSIONS.X.TOP.SIDES.VARIATION, DISLOCATION: random(100)}
+        }
+      },
+    };
+
+    this.OUTER_ZONE = {
+      NOISE: {AMPLITUDE: 10, DISLOCATION: random(100)}
+    };
+
+    this.DARK_ZONE_COORDINATES = {
+      LUMINOUS:{
+        X: 0, Y: 45*heightRatio,
+        DIAM_X: 50*heightRatio, DIAM_Y: 65*heightRatio,
+        D_DIAM_X: 5*heightRatio, D_DIAM_Y: 10*heightRatio,
+        ALPHA: 190, N: 2
+      },
+      NON_LUMINOUS: {
+        X: 0, Y: 45*heightRatio,
+        DIAM_X: 40*heightRatio, DIAM_Y: 50*heightRatio,
+        D_DIAM_X: 5*heightRatio, D_DIAM_Y: 5*heightRatio,
+        ALPHA: 80, N: 7
+      },
+      BACK_LIGHT: {
+        X: 0, Y: 40*heightRatio,
+        DIAM_X: 30*heightRatio, DIAM_Y: 45*heightRatio,
+        D_DIAM_Y: 0, D_DIAM_X: 0,
+        ALPHA: 255, N: 1
+      },
+      BLUE_TIP: {
+        X: 0, Y: 40*heightRatio,
+        DIAM_X: 27*heightRatio, DIAM_Y: 45*heightRatio,
+        D_DIAM_Y: 5*heightRatio, D_DIAM_X: 5*heightRatio,
+        ALPHA: 80, N: 7
+      }
+    };
