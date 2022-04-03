@@ -251,3 +251,55 @@ TOP: {
         ALPHA: 80, N: 7
       }
     };
+let BACK_LIGHT_DIAM = {
+      DEFAULT: 8*heightRatio,
+      VARIATION: 8*heightRatio
+    };
+
+    this.BACK_LIGHT_COORDINATES = {
+      Y: -10*heightRatio,
+      DIAM_X: 5, DIAM_Y: 15*heightRatio,
+      D_DIAM_Y: {
+        DEFAULT: BACK_LIGHT_DIAM.DEFAULT,
+        NOISE: {AMPLITUDE: BACK_LIGHT_DIAM.VARIATION, DISLOCATION: random(100)}
+      },
+      D_DIAM_X: {
+        DEFAULT: BACK_LIGHT_DIAM.DEFAULT,
+        NOISE: {AMPLITUDE: BACK_LIGHT_DIAM.VARIATION, DISLOCATION: random(100)}
+      },
+      N: 10
+    };
+
+    this.BLUE_TIP_COORDINATES = {
+      X: - (this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT + this.DIMENSIONS.X.BOTTOM.SIDES.VARIATION),
+      Y: -(this.DIMENSIONS.Y.DEFAULT + this.DIMENSIONS.Y.VARIATION),
+      W: 2*(this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT + this.DIMENSIONS.X.BOTTOM.SIDES.VARIATION),
+      H: 70*heightRatio,
+      D_H: 4*heightRatio,
+      ALPHA: 50,
+      N: 10,
+    };
+
+    this.COLOR = {
+      WHITE: color(255),
+      YELLOW: color(255, 255, 200),
+      ORANGE:color(255, 100, 0),
+      RED: color(255, 0, 0, 10),
+      BLUE: color(100, 175, 255)
+    }
+  }
+
+  updateData() {
+    let dNoise = 0.02*frameCount;
+
+    this.updateFlameOutlineCoordinates(dNoise);
+    this.updateDarkZoneCoordinates();  
+    this.updateBackLightCoordinates(dNoise);
+  }
+
+  updateFlameOutlineCoordinates(dNoise) {
+    let C = this.FLAME_OUTLINE_COORDINATES;
+    let dCenter = {
+      bottom: vary(C.BOTTOM.CENTER, dNoise),
+      top: vary(C.TOP.CENTER, dNoise)
+    };
