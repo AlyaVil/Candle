@@ -303,3 +303,103 @@ let BACK_LIGHT_DIAM = {
       bottom: vary(C.BOTTOM.CENTER, dNoise),
       top: vary(C.TOP.CENTER, dNoise)
     };
+this.flameOutlineCoordinates = {
+      bottom: {
+        y: vary(C.BOTTOM.Y, dNoise),
+        center: dCenter.bottom,
+        left: dCenter.bottom + vary(C.BOTTOM.LEFT, dNoise),
+        right: dCenter.bottom + vary(C.BOTTOM.RIGHT, dNoise),
+      },
+      top: {
+        y: vary(C.TOP.Y, dNoise),
+        center: dCenter.top,
+        left: dCenter.top + vary(C.TOP.LEFT, dNoise),
+        right: dCenter.top + vary(C.TOP.RIGHT, dNoise)
+      }
+    };
+
+    this.outerZone = customNoise(this.OUTER_ZONE.NOISE, dNoise);
+  }
+
+  updateDarkZoneCoordinates() { 
+    let C = this.DARK_ZONE_COORDINATES;
+
+    this.darkZoneCoordinates = {
+      luminous: this.setDarkZoneCoordinates(C.LUMINOUS),
+      nonLuminous: this.setDarkZoneCoordinates(C.NON_LUMINOUS),
+      backLight: this.setDarkZoneCoordinates(C.BACK_LIGHT),
+      blueTip: this.setDarkZoneCoordinates(C.BLUE_TIP)
+    };
+  }
+
+  updateBackLightCoordinates(dNoise) {
+    let C = this.BACK_LIGHT_COORDINATES;
+    let foc = this.flameOutlineCoordinates;
+
+    this.backLightCoordinates = {
+      x: 0.5*(foc.bottom.center + foc.top.center),    
+      y: this.calcY(C.Y),
+      diamX: C.DIAM_X,
+      diamY: C.DIAM_Y,
+      dDiamX: vary(C.D_DIAM_X, dNoise),
+      dDiamY: vary(C.D_DIAM_Y, dNoise),
+      n: C.N
+    };
+  }
+
+  calcY(defaultValue) {
+    return map(defaultValue,
+               -this.DIMENSIONS.Y.DEFAULT, this.DIMENSIONS.Y.DEFAULT,
+               this.flameOutlineCoordinates.top.y, this.flameOutlineCoordinates.bottom.y);
+  }
+  
+  calcX(defaultValue, h) {
+    return map(defaultValue,
+               -this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT, this.DIMENSIONS.X.BOTTOM.SIDES.DEFAULT,
+               this.flameOutlineCoordinates.bottom.left, this.flameOutlineCoordinates.bottom.right);
+  }
+
+  setDarkZoneCoordinates(ZONE) {
+    return {
+      x: this.calcX(ZONE.X),
+      y: this.calcY(ZONE.Y),
+      diamX: this.calcX(ZONE.DIAM_X),
+      diamY: this.calcY(ZONE.DIAM_Y),
+      dDiamX: ZONE.D_DIAM_X,
+      dDiamY: ZONE.D_DIAM_Y,
+      alpha: ZONE.ALPHA,
+      n: ZONE.N
+    }
+  }
+
+  backLight() {
+    let pg = this.layer[0];
+    pg.clear();
+  
+    pg.noStroke();
+    pg.fill(this.COLOR.RED);
+    light(pg, this.backLightCoordinates);
+
+    darkZone(pg, this.darkZoneCoordinates.backLight);
+  }
+
+  nonLuminousZone() {
+    let pg = this.layer[1];
+    pg.clear();
+  
+    pg.stroke(this.COLOR.ORANGE);
+    pg.strokeWeight(5*heightRatio);
+    pg.fill(this.COLOR.ORANGE);
+    flameOutline(pg, this.flameOutlineCoordinates);
+
+    darkZone(pg, this.darkZoneCoordinates.nonLuminous);
+  }
+
+  luminousZone() {
+    let pg = this.layer[2];   
+    pg.clear();
+  
+    pg.stroke(this.COLOR.YELLOW);
+    pg.strokeWeight(5*heightRatio);
+    pg.fill(this.COLOR.WHITE); 
+    flameOutline(pg, this.flameOutlineCoordinates, this.outerZone);
