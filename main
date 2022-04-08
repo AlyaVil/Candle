@@ -403,3 +403,77 @@ this.flameOutlineCoordinates = {
     pg.strokeWeight(5*heightRatio);
     pg.fill(this.COLOR.WHITE); 
     flameOutline(pg, this.flameOutlineCoordinates, this.outerZone);
+
+  darkZone(pg, this.darkZoneCoordinates.nonLuminous);
+  }
+
+  luminousZone() {
+    let pg = this.layer[2];   
+    pg.clear();
+  
+    pg.stroke(this.COLOR.YELLOW);
+    pg.strokeWeight(5*heightRatio);
+    pg.fill(this.COLOR.WHITE); 
+    flameOutline(pg, this.flameOutlineCoordinates, this.outerZone);
+
+    darkZone(pg, this.darkZoneCoordinates.luminous);
+  }
+
+  blueTip() {
+    let pg = this.layer[3];
+    pg.clear();
+
+    pg.noStroke();
+    pg.fill(this.COLOR.BLUE);
+    pg.stroke(this.COLOR.BLUE);
+    pg.strokeWeight(5*heightRatio);
+
+    flameOutline(pg, this.flameOutlineCoordinates);
+    
+    darkZone(pg, this.darkZoneCoordinates.blueTip);
+    tip(pg, this.BLUE_TIP_COORDINATES);
+  }
+}
+
+function vary(CONST, dNoise) {
+  return CONST.DEFAULT + customNoise(CONST.NOISE, dNoise);
+}
+
+function customNoise(CONFIG, value) {
+  return CONFIG.AMPLITUDE * (0.5 - noise(CONFIG.DISLOCATION + value));
+}
+
+function flameOutline(pg, c, dTop = 0) {
+  pg.beginShape();
+  pg.vertex(c.bottom.center, c.bottom.y);
+  pg.bezierVertex(c.bottom.right, c.bottom.y,
+                  c.top.right, c.top.y + dTop,
+                  c.top.center, c.top.y + dTop);
+  pg.bezierVertex(c.top.left, c.top.y + dTop,
+                  c.bottom.left, c.bottom.y,
+                  c.bottom.center, c.bottom.y);
+  pg.endShape();
+}
+
+function darkZone(pg, c) {
+  pg.noStroke();
+  pg.erase(c.alpha);
+  for(let i = 0; i < c.n; ++i) {
+    pg.ellipse(c.x, c.y, c.diamX-c.dDiamX*i, c.diamY-c.dDiamY*i);
+  }
+  pg.noErase();
+}
+
+function light(pg, c) {
+  for (let i = 0; i < c.n; i++) {
+    pg.ellipse(c.x, c.y, c.diamX + c.dDiamX*i, c.diamY + c.dDiamY*i);
+  }
+}
+
+function tip(pg, C) {
+  pg.erase(C.ALPHA);
+  for (let i = 0; i < C.N; ++i) {
+    pg.rect(C.X, C.Y, C.W, C.H+C.D_H*i);
+  }
+  pg.noErase();
+}
